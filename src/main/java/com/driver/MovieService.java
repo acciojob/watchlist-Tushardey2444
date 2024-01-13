@@ -42,7 +42,12 @@ public class MovieService {
     public String deleteAllDirectors(){
         List<String> directors=movieRepository.findAllDirectors();
         for(String director:directors){
-            deleteDirectorByName(director);
+            movieRepository.deleteDirectorByName(director);
+        }
+        List<Movie> unassignedMovies=movieRepository.unassignedMovies();
+        movieRepository.deleteAllMovies();
+        for(Movie movie:unassignedMovies){
+            movieRepository.addMovieInMovieDb(movie);
         }
         return "success";
     }

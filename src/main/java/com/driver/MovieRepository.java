@@ -11,9 +11,14 @@ public class MovieRepository {
     private HashMap<String,Movie> movieDb=new HashMap<>();
     private HashMap<String,Director> directorDb=new HashMap<>();
     private HashMap<String, List<String>> movieDirectorDb=new HashMap<>();
+    private HashMap<String,Movie> unassignedMovieDb=new HashMap<>();
     public String addMovie(Movie movie){
         movieDb.put(movie.getName(),movie);
+        unassignedMovieDb.put(movie.getName(),movie);
         return "success";
+    }
+    public void addMovieInMovieDb(Movie movie){
+        movieDb.put(movie.getName(),movie);
     }
     public String addDirector(Director director){
         directorDb.put(director.getName(),director);
@@ -24,6 +29,7 @@ public class MovieRepository {
             movieDirectorDb.put(directorName,new ArrayList<>());
         }
         movieDirectorDb.get(directorName).add(movieName);
+        unassignedMovieDb.remove(movieName);
         return "success";
     }
     public Movie getMovieByName(String movieName){
@@ -48,5 +54,11 @@ public class MovieRepository {
     }
     public List<String> findAllDirectors(){
         return new ArrayList<>(directorDb.keySet());
+    }
+    public List<Movie> unassignedMovies(){
+        return new ArrayList<>(unassignedMovieDb.values());
+    }
+    public void deleteAllMovies(){
+        movieDb=new HashMap<>();
     }
 }
